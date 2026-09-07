@@ -10,7 +10,7 @@ command -v docker >/dev/null 2>&1 || {
   exit 1
 }
 
-docker build --pull --progress=quiet --tag "$IMAGE_NAME" "$ROOT_DIR"
+docker build --pull --progress=quiet --tag "$IMAGE_NAME" "$ROOT_DIR" >/dev/null 2>&1
 
 # Docker needs host administrator authorization only for the privileged device session.
 # Keep this after the build so opening the project does not prompt for a password.
