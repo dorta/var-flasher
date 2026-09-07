@@ -8,11 +8,13 @@ const crypto = require('node:crypto');
 const zlib = require('node:zlib');
 const { listDevices } = require('./devices');
 
-const cache = path.join(os.tmpdir(), 'var-flasher');
+const tempCache = path.join(os.tmpdir(), 'var-flasher');
+const savedCache = path.join(os.homedir(), '.var-flasher', 'images');
 function get(url) { return new Promise((resolve, reject) => { https.get(url, {headers:{'User-Agent':'var-flasher/0.1'}}, r => { if ([301,302,303,307,308].includes(r.statusCode) && r.headers.location) { r.resume(); return resolve(get(new URL(r.headers.location,url).href)); } if (r.statusCode !== 200) { r.resume(); return reject(new Error(`HTTP ${r.statusCode}`)); } resolve(r); }).on('error', reject); }); }
-async function download(release, onProgress) {
+async function download(release, onProgress, options = {}) {
   if (!release?.downloadUrl) throw new Error('This release has no published download link.');
-  await fsp.mkdir(cache, {recursive:true});
+  const cache = options.persist ? savedCache : tempCache;
+  await fsp.mkdir(cache, {recursive:true, mode:0o700});
   const name = path.basename(new URL(release.downloadUrl).pathname) || 'release-image';
   const target = path.join(cache, name);
   const response = await get(release.downloadUrl);
@@ -26,10 +28,10 @@ async function download(release, onProgress) {
     const files = await findImages(extractDir);
     if (!files.length) throw new Error('The release package does not contain an .img or .wic recovery image.');
     const imagePath = files[0]; const hash = await sha256(imagePath);
-    return { path:imagePath, size:(await fsp.stat(imagePath)).size, sha256:hash, artifactType:'image', artifactName:path.basename(imagePath), packagePath:target };
+    return { path:imagePath, size:(await fsp.stat(imagePath)).size, sha256:hash, packageSha256:hash, artifactType:'image', artifactName:path.basename(imagePath), packagePath:target, persisted:!!options.persist };
   }
   const hash = await sha256(target);
-  return { path: target, size: (await fsp.stat(target)).size, sha256: hash, artifactType: release.artifactType, artifactName: name };
+  return { path: target, size: (await fsp.stat(target)).size, sha256: hash, artifactType: release.artifactType, artifactName: name, persisted:!!options.persist };
 }
 async function findImages(dir) { const out=[]; async function walk(d) { for (const e of await fsp.readdir(d,{withFileTypes:true})) { const p=path.join(d,e.name); if(e.isDirectory()) await walk(p); else if(/\.(?:img|wic)(?:\.gz)?$/i.test(e.name)) out.push(p); } } await walk(dir); return out; }
 function sha256(file) { return new Promise((resolve,reject) => { const h=crypto.createHash('sha256'); const s=fs.createReadStream(file); s.on('data',b=>h.update(b)); s.on('error',reject); s.on('end',()=>resolve(h.digest('hex'))); }); }

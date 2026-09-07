@@ -29,7 +29,7 @@ function createWindow() {
 ipcMain.handle('catalog:list', () => listReleases());
 ipcMain.handle('catalog:release', (_event, url) => releaseDetails(url));
 ipcMain.handle('devices:list', () => listDevices());
-ipcMain.handle('image:download', async (event, release) => download(release, (progress) => event.sender.send('image:progress', progress)));
+ipcMain.handle('image:download', async (event, payload) => download(payload.release, (progress) => event.sender.send('image:progress', progress), payload.options));
 ipcMain.handle('image:write', async (event, payload) => writeImage(payload, (progress) => event.sender.send('image:progress', progress)));
 ipcMain.handle('image:choose', async () => {
   const result = await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Recovery images', extensions: ['img', 'gz'] }] });
