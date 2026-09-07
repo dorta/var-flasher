@@ -13,4 +13,5 @@
     <div class="panel target-panel locked" id="targetPanel"><div class="panel-lock">Select a release first</div><div class="panel-head"><div><p class="eyebrow">STEP 2</p><h2>Select target</h2><p id="deviceStatus" class="muted">Scanning removable devices...</p></div><button id="refreshDevices" class="quiet">Refresh</button></div><div id="devices" class="device-list"></div><p class="warning">Writing erases the selected disk completely.</p></div>
   </section>
   <section class="action-bar"><div class="selection"><div class="selection-icon">✓</div><div><p class="eyebrow">READY WHEN YOU ARE</p><h2 id="selectionTitle">Select an image and target</h2><p id="selectionStatus" class="muted">Nothing will be written until you confirm.</p></div></div><button id="write" class="flash-button" disabled>Flash image</button></section>
-</main><script src="./renderer.js"></script></body></html>
+</main>
+<div id="modal" class="modal" aria-hidden="true"><div class="modal-card"><p class="eyebrow" id="modalEyebrow">CONFIRMATION</p><h2 id="modalTitle">Are you sure?</h2><p id="modalMessage" class="muted"></p><div class="modal-actions"><button id="modalCancel" class="quiet">Cancel</button><button id="modalConfirm" class="flash-button">Continue</button></div></div></div><script src="./renderer.js"></script></body></html>
