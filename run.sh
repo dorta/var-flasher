@@ -10,7 +10,7 @@ command -v docker >/dev/null 2>&1 || {
   exit 1
 }
 
-docker build --progress=quiet --tag "$IMAGE_NAME" "$ROOT_DIR"
+docker build --pull --progress=quiet --tag "$IMAGE_NAME" "$ROOT_DIR"
 
 docker_args=(
   --rm

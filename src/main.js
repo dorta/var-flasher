@@ -1,29 +1,30 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const path = require('node:path');
+const { listReleases, releaseDetails } = require('./catalog');
+const { listDevices } = require('./devices');
 
 function createWindow() {
   const window = new BrowserWindow({
-    width: 1100,
-    height: 720,
-    minWidth: 900,
-    minHeight: 600,
+    width: 1180, height: 780, minWidth: 900, minHeight: 620,
     backgroundColor: '#f7f7f7',
-    webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
-
   window.loadFile(path.join(__dirname, 'renderer/index.html'));
+  window.webContents.on('did-fail-load', (_event, code, description) => {
+    console.error('Renderer failed to load:', code, description);
+  });
 }
+
+ipcMain.handle('catalog:list', () => listReleases());
+ipcMain.handle('catalog:release', (_event, url) => releaseDetails(url));
+ipcMain.handle('devices:list', () => listDevices());
+ipcMain.handle('image:choose', async () => {
+  const result = await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Recovery images', extensions: ['img', 'gz'] }] });
+  return result.canceled ? null : result.filePaths[0];
+});
 
 app.whenReady().then(() => {
   createWindow();
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+  app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });

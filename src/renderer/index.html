@@ -1,40 +1,13 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Var Flasher</title>
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <main class="shell">
-      <header class="topbar">
-        <div class="brand"><span class="brand-mark">V</span><span>Var Flasher</span></div>
-        <span class="platform">Linux prototype</span>
-      </header>
-      <section class="content">
-        <div class="intro">
-          <p class="eyebrow">RECOVERY IMAGES</p>
-          <h1>Write a recovery image to an SD card.</h1>
-          <p class="muted">Choose an image, select a removable device, and verify it before writing.</p>
-        </div>
-        <div class="grid">
-          <section class="card">
-            <div class="card-heading"><span class="step">1</span><div><h2>Choose an image</h2><p>Browse the release catalog or use a local file.</p></div></div>
-            <button class="select-button" type="button">Browse images</button>
-            <div class="empty-state">The DigitalOcean release catalog will appear here.</div>
-          </section>
-          <section class="card">
-            <div class="card-heading"><span class="step">2</span><div><h2>Select an SD card</h2><p>Only removable devices should be used.</p></div></div>
-            <div class="device empty-state">No removable devices detected.</div>
-            <button class="refresh" type="button">Refresh devices</button>
-          </section>
-        </div>
-        <section class="write-panel">
-          <div><h2>Ready to write</h2><p class="muted">Select an image and an SD card to continue.</p></div>
-          <button class="primary" type="button" disabled>Write image</button>
-        </section>
-      </section>
-    </main>
-  </body>
-</html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Var Flasher</title><link rel="stylesheet" href="./styles.css"></head>
+<body>
+<header class="topbar"><div class="brand"><span class="brand-mark">V</span><span>Var Flasher</span></div><span class="platform">Linux prototype</span></header>
+<main class="content">
+<section class="intro"><p class="eyebrow">RECOVERY IMAGES</p><h1>Choose a release. Flash it safely.</h1><p class="muted">Browse the Variscite catalog, select an SD card, and verify the image before writing.</p></section>
+<section class="filters card"><label>Search<input id="search" placeholder="SOM, OS or release"></label><label>SOM<select id="som"><option value="">All SOMs</option></select></label><label>OS<select id="os"><option value="">All OSes</option></select></label><button id="refreshCatalog" class="secondary">Refresh catalog</button></section>
+<section class="card"><div class="section-title"><div><h2>Available releases</h2><p id="catalogStatus" class="muted">Loading catalog...</p></div></div><div id="releases" class="release-list"></div></section>
+<section class="card device-card"><div class="section-title"><div><h2>SD card</h2><p id="deviceStatus" class="muted">No device selected.</p></div><button id="refreshDevices" class="secondary">Refresh devices</button></div><div id="devices" class="device-list"></div></section>
+<section class="write-panel"><div><h2 id="selectionTitle">Ready to write</h2><p id="selectionStatus" class="muted">Select a release and a removable SD card.</p></div><button id="write" class="primary" disabled>Write image</button></section>
+</main><script src="./renderer.js"></script>
+</body></html>

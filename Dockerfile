@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /opt/var-flasher
 COPY package*.json ./
-RUN npm ci --omit=optional --no-audit --no-fund --loglevel=error
+RUN npm ci --omit=optional --no-audit --no-fund --loglevel=error && node node_modules/electron/install.js && test -x node_modules/electron/dist/electron
 COPY src ./src
 COPY README.md ./README.md
 
