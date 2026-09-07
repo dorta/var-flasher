@@ -10,7 +10,7 @@
       <div class="filters"><label>Search<input id="search" placeholder="Search SOM, OS or release"></label><label>SOM<select id="som"><option value="">All SOMs</option></select></label><label>OS<select id="os"><option value="">All OSes</option></select></label></div>
       <div id="releases" class="release-list"></div>
     </div>
-    <div class="panel target-panel"><div class="panel-head"><div><p class="eyebrow">STEP 2</p><h2>Select target</h2><p id="deviceStatus" class="muted">Scanning removable devices...</p></div><button id="refreshDevices" class="quiet">Refresh</button></div><div id="devices" class="device-list"></div><p class="warning">Writing erases the selected disk completely.</p></div>
+    <div class="panel target-panel locked" id="targetPanel"><div class="panel-lock">Select a release first</div><div class="panel-head"><div><p class="eyebrow">STEP 2</p><h2>Select target</h2><p id="deviceStatus" class="muted">Scanning removable devices...</p></div><button id="refreshDevices" class="quiet">Refresh</button></div><div id="devices" class="device-list"></div><p class="warning">Writing erases the selected disk completely.</p></div>
   </section>
   <section class="action-bar"><div class="selection"><div class="selection-icon">✓</div><div><p class="eyebrow">READY WHEN YOU ARE</p><h2 id="selectionTitle">Select an image and target</h2><p id="selectionStatus" class="muted">Nothing will be written until you confirm.</p></div></div><button id="write" class="flash-button" disabled>Flash image</button></section>
 </main><script src="./renderer.js"></script></body></html>
