@@ -3,7 +3,8 @@
 body { margin:0; color:var(--ink); background:#f7f7f7; font-family:Montserrat,Calibri,Arial,sans-serif; }
 .topbar { height:72px; display:flex; align-items:center; justify-content:space-between; padding:0 42px; background:#fff; border-bottom:1px solid var(--line); }
 .brand { display:flex; align-items:center; gap:12px; font-size:20px; font-weight:700; }
-.brand-mark { display:grid; place-items:center; width:32px; height:32px; border-radius:50%; background:var(--orange); color:#fff; font-weight:800; }
+.brand-logo { width:142px; height:auto; display:block; }
+.brand-divider { color:var(--line); font-weight:400; }
 .platform,.eyebrow { color:var(--orange); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
 .content { max-width:1180px; margin:0 auto; padding:42px 32px 58px; }
 .intro { margin-bottom:26px; }
