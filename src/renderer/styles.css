@@ -1,0 +1,26 @@
+:root { --orange: #ff5f46; --ink: #1d1d1d; --muted: #737373; --line: #e6e6e6; --soft: #f0f0f0; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: #f7f7f7; font-family: Montserrat, Calibri, Arial, sans-serif; }
+.shell { min-height: 100vh; }
+.topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 42px; background: white; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 700; }
+.brand-mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--orange); color: white; font-weight: 800; }
+.platform, .eyebrow { color: var(--orange); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.content { max-width: 1010px; margin: 0 auto; padding: 58px 32px; }
+.intro { margin-bottom: 36px; }
+h1 { max-width: 650px; margin: 10px 0; font-size: 38px; line-height: 1.12; letter-spacing: -.04em; }
+h2 { margin: 0; font-size: 18px; }
+p { margin: 7px 0 0; line-height: 1.5; }
+.muted, .card-heading p { color: var(--muted); font-size: 14px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.card, .write-panel { border: 1px solid var(--line); border-radius: 10px; background: white; padding: 25px; }
+.card-heading { display: flex; gap: 14px; align-items: flex-start; min-height: 66px; }
+.step { display: grid; place-items: center; flex: 0 0 30px; height: 30px; border-radius: 50%; background: #ffe5e0; color: var(--orange); font-weight: 700; }
+button { border: 0; border-radius: 7px; padding: 13px 18px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.select-button { width: 100%; margin-top: 28px; background: var(--orange); color: white; }
+.empty-state { display: grid; place-items: center; min-height: 130px; margin-top: 14px; border: 1px dashed #cfcfcf; border-radius: 8px; color: var(--muted); font-size: 13px; text-align: center; }
+.refresh { margin-top: 14px; padding: 8px 0; background: transparent; color: var(--orange); }
+.write-panel { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; }
+.primary { background: var(--orange); color: white; }
+button:disabled { cursor: not-allowed; opacity: .45; }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .write-panel { align-items: flex-start; gap: 20px; flex-direction: column; } }

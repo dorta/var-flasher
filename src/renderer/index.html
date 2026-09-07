@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Var Flasher</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark">V</span><span>Var Flasher</span></div>
+        <span class="platform">Linux prototype</span>
+      </header>
+      <section class="content">
+        <div class="intro">
+          <p class="eyebrow">RECOVERY IMAGES</p>
+          <h1>Write a recovery image to an SD card.</h1>
+          <p class="muted">Choose an image, select a removable device, and verify it before writing.</p>
+        </div>
+        <div class="grid">
+          <section class="card">
+            <div class="card-heading"><span class="step">1</span><div><h2>Choose an image</h2><p>Browse the release catalog or use a local file.</p></div></div>
+            <button class="select-button" type="button">Browse images</button>
+            <div class="empty-state">The DigitalOcean release catalog will appear here.</div>
+          </section>
+          <section class="card">
+            <div class="card-heading"><span class="step">2</span><div><h2>Select an SD card</h2><p>Only removable devices should be used.</p></div></div>
+            <div class="device empty-state">No removable devices detected.</div>
+            <button class="refresh" type="button">Refresh devices</button>
+          </section>
+        </div>
+        <section class="write-panel">
+          <div><h2>Ready to write</h2><p class="muted">Select an image and an SD card to continue.</p></div>
+          <button class="primary" type="button" disabled>Write image</button>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
