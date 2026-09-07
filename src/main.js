@@ -1,12 +1,16 @@
-const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, screen } = require('electron');
 const path = require('node:path');
 const { listReleases, releaseDetails } = require('./catalog');
 const { listDevices } = require('./devices');
 const { download, writeImage } = require('./images');
 
 function createWindow() {
+  const workArea = screen.getPrimaryDisplay().workAreaSize;
+  const preset = workArea.width >= 3000 ? { width: 1920, height: 1080 } : workArea.width >= 1800 ? { width: 1440, height: 810 } : { width: 1280, height: 720 };
+  const width = Math.min(preset.width, workArea.width);
+  const height = Math.min(preset.height, workArea.height);
   const window = new BrowserWindow({
-    width: 1280, height: 720, resizable: false, maximizable: false, fullscreenable: false,
+    width, height, resizable: false, maximizable: false, fullscreenable: false,
     backgroundColor: '#f7f7f7',
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
