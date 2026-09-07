@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Var Flasher</title><link rel="stylesheet" href="./styles.css"></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Var Flasher</title><link rel="stylesheet" href="./styles.css"></head>
 <body>
-<noscript><div style="padding:32px;font:16px Arial;color:#1d1d1d;background:#fff">Var Flasher precisa carregar o JavaScript para funcionar.</div></noscript>
-<div id="bootError" style="display:none;margin:24px;padding:18px;border:2px solid #ff5f46;border-radius:10px;background:#fff;color:#1d1d1d;font:14px Arial"><strong>Var Flasher não conseguiu carregar a interface.</strong><pre id="bootErrorText" style="white-space:pre-wrap"></pre></div>
-<script>window.addEventListener('error',function(e){var b=document.getElementById('bootError');if(b){b.style.display='block';document.getElementById('bootErrorText').textContent=e.error?.stack||e.message||'Unknown renderer error';}});window.addEventListener('unhandledrejection',function(e){var b=document.getElementById('bootError');if(b){b.style.display='block';document.getElementById('bootErrorText').textContent=String(e.reason);}});</script>
-<header class="topbar"><div class="brand"><img class="brand-logo" src="./variscite-logo.svg" alt="Variscite"><span class="brand-divider">/</span><span>Var Flasher</span></div><span class="platform">Linux prototype</span></header>
-<main class="content">
-<section class="intro"><p class="eyebrow">RECOVERY IMAGES</p><h1>Choose a release. Flash it safely.</h1><p class="muted">Browse the Variscite catalog, select an SD card, and verify the image before writing.</p></section>
-<section class="filters card"><label>Search<input id="search" placeholder="SOM, OS or release"></label><label>SOM<select id="som"><option value="">All SOMs</option></select></label><label>OS<select id="os"><option value="">All OSes</option></select></label><button id="refreshCatalog" class="secondary">Refresh catalog</button></section>
-<section class="card"><div class="section-title"><div><h2>Available releases</h2><p id="catalogStatus" class="muted">Loading catalog...</p></div></div><div id="releases" class="release-list"></div></section>
-<section class="card device-card"><div class="section-title"><div><h2>SD card</h2><p id="deviceStatus" class="muted">No device selected.</p></div><button id="refreshDevices" class="secondary">Refresh devices</button></div><div id="devices" class="device-list"></div></section>
-<section class="write-panel"><div><h2 id="selectionTitle">Ready to write</h2><p id="selectionStatus" class="muted">Select a release and a removable SD card.</p></div><button id="write" class="primary" disabled>Write image</button></section>
-</main><script src="./renderer.js"></script>
-</body></html>
+<header class="topbar"><div class="brand"><img class="brand-logo" src="./variscite-logo.svg" alt="Variscite"><span class="brand-divider">/</span><strong>Var Flasher</strong></div><span class="platform">LINUX PROTOTYPE</span></header>
+<main class="app-shell">
+  <section class="hero"><p class="eyebrow">RECOVERY MEDIA</p><h1>Flash Variscite images<br>with confidence.</h1><p class="muted">Select an image, choose an SD card, and verify every byte.</p></section>
+  <nav class="steps" aria-label="Flashing steps"><div class="step active" id="step1"><span>1</span><div><strong>Image</strong><small>Choose a release</small></div></div><i></i><div class="step" id="step2"><span>2</span><div><strong>Target</strong><small>Select an SD card</small></div></div><i></i><div class="step" id="step3"><span>3</span><div><strong>Flash</strong><small>Write and verify</small></div></div></nav>
+  <section class="workspace">
+    <div class="panel image-panel"><div class="panel-head"><div><p class="eyebrow">STEP 1</p><h2>Select a recovery image</h2><p id="catalogStatus" class="muted">Loading catalog...</p></div><button id="refreshCatalog" class="quiet">Refresh</button></div>
+      <div class="filters"><label>Search<input id="search" placeholder="Search SOM, OS or release"></label><label>SOM<select id="som"><option value="">All SOMs</option></select></label><label>OS<select id="os"><option value="">All OSes</option></select></label></div>
+      <div id="releases" class="release-list"></div>
+    </div>
+    <div class="panel target-panel"><div class="panel-head"><div><p class="eyebrow">STEP 2</p><h2>Select target</h2><p id="deviceStatus" class="muted">Scanning removable devices...</p></div><button id="refreshDevices" class="quiet">Refresh</button></div><div id="devices" class="device-list"></div><p class="warning">Writing erases the selected disk completely.</p></div>
+  </section>
+  <section class="action-bar"><div class="selection"><div class="selection-icon">✓</div><div><p class="eyebrow">READY WHEN YOU ARE</p><h2 id="selectionTitle">Select an image and target</h2><p id="selectionStatus" class="muted">Nothing will be written until you confirm.</p></div></div><button id="write" class="flash-button" disabled>Flash image</button></section>
+</main><script src="./renderer.js"></script></body></html>
