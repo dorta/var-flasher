@@ -2,6 +2,7 @@ const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const path = require('node:path');
 const { listReleases, releaseDetails } = require('./catalog');
 const { listDevices } = require('./devices');
+const { download, writeImage } = require('./images');
 
 function createWindow() {
   const window = new BrowserWindow({
@@ -18,6 +19,8 @@ function createWindow() {
 ipcMain.handle('catalog:list', () => listReleases());
 ipcMain.handle('catalog:release', (_event, url) => releaseDetails(url));
 ipcMain.handle('devices:list', () => listDevices());
+ipcMain.handle('image:download', async (event, release) => download(release, (progress) => event.sender.send('image:progress', progress)));
+ipcMain.handle('image:write', async (event, payload) => writeImage(payload, (progress) => event.sender.send('image:progress', progress)));
 ipcMain.handle('image:choose', async () => {
   const result = await dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Recovery images', extensions: ['img', 'gz'] }] });
   return result.canceled ? null : result.filePaths[0];

@@ -7,4 +7,5 @@ contextBridge.exposeInMainWorld('varFlasher', {
   chooseImage: () => ipcRenderer.invoke('image:choose'),
   downloadImage: (release) => ipcRenderer.invoke('image:download', release),
   writeImage: (payload) => ipcRenderer.invoke('image:write', payload),
+  onProgress: (callback) => ipcRenderer.on('image:progress', (_event, progress) => callback(progress)),
 });

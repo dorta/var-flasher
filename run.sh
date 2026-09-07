@@ -5,6 +5,12 @@ ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 IMAGE_NAME="var-flasher:local"
 HOST_XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}"
 
+if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
+  command -v sudo >/dev/null 2>&1 || { echo "sudo is required to authorize SD-card writing." >&2; exit 1; }
+  echo "Administrator authentication is required before Var Flasher can access removable disks."
+  sudo -v
+fi
+
 command -v docker >/dev/null 2>&1 || {
   echo "Docker is required. Install Docker and run this script again." >&2
   exit 1

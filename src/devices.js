@@ -2,7 +2,7 @@ const { execFile } = require('node:child_process');
 
 function listDevices() {
   return new Promise((resolve, reject) => {
-    execFile('lsblk', ['-J', '-o', 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MOUNTPOINTS'], { timeout: 10000 }, (error, stdout, stderr) => {
+    execFile('lsblk', ['-J', '-o', 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MAJ:MIN,SERIAL,MOUNTPOINTS'], { timeout: 10000 }, (error, stdout, stderr) => {
       if (error) return reject(new Error(stderr.trim() || error.message));
       let data;
       try { data = JSON.parse(stdout); } catch (parseError) { return reject(parseError); }
@@ -12,7 +12,9 @@ function listDevices() {
         size: d.size || 'unknown',
         model: (d.model || 'Unknown device').trim(),
         transport: d.tran || 'unknown',
-        removable: d.rm === true || d.rm === '1' || d.tran === 'usb' || d.tran === 'mmc',
+        majorMinor: d['maj:min'] || null,
+        serial: (d.serial || '').trim() || null,
+        removable: d.rm === true || d.rm === '1',
         readOnly: d.ro === true || d.ro === '1',
         mountpoints: (d.mountpoints || []).filter(Boolean),
       })).filter((d) => d.removable && !d.readOnly);
