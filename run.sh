@@ -10,7 +10,7 @@ command -v docker >/dev/null 2>&1 || {
   exit 1
 }
 
-docker build --tag "$IMAGE_NAME" "$ROOT_DIR"
+docker build --progress=quiet --tag "$IMAGE_NAME" "$ROOT_DIR"
 
 docker_args=(
   --rm
@@ -20,9 +20,18 @@ docker_args=(
   --env "DISPLAY=${DISPLAY:-}"
   --env ELECTRON_OZONE_PLATFORM_HINT=x11
   --env LIBGL_ALWAYS_SOFTWARE=1
+  --env NO_AT_BRIDGE=1
+  --env GTK_MODULES=
   --volume /tmp/.X11-unix:/tmp/.X11-unix:rw
   --volume /dev:/dev
 )
+
+if [[ -S /run/dbus/system_bus_socket ]]; then
+  docker_args+=(
+    --env DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
+    --volume /run/dbus:/run/dbus:ro
+  )
+fi
 
 if [[ -f "$HOST_XAUTHORITY" ]]; then
   docker_args+=(
