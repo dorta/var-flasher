@@ -10,7 +10,9 @@ function createWindow() {
     backgroundColor: '#f7f7f7',
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
-  window.loadFile(path.join(__dirname, 'renderer/index.html'));
+  window.webContents.on('console-message', (_event, level, message) => console.log(`[renderer:${level}] ${message}`));
+  window.webContents.on('render-process-gone', (_event, details) => console.error('Renderer process exited:', details.reason));
+  window.loadFile(path.join(__dirname, 'renderer/index.html')).then(() => console.log('Renderer loaded successfully')).catch((error) => console.error('Renderer load failed:', error));
   window.webContents.on('did-fail-load', (_event, code, description) => {
     console.error('Renderer failed to load:', code, description);
   });
