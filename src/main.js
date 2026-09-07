@@ -6,7 +6,7 @@ const { download, writeImage } = require('./images');
 
 function createWindow() {
   const window = new BrowserWindow({
-    width: 1280, height: 720, minWidth: 1000, minHeight: 640,
+    width: 1280, height: 720, resizable: false, maximizable: false, fullscreenable: false,
     backgroundColor: '#f7f7f7',
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
