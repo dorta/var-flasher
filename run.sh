@@ -34,25 +34,16 @@ docker_args=(
   --volume /dev:/dev
 )
 
-if [[ -S /run/dbus/system_bus_socket ]]; then
-  docker_args+=(
-    --env DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
-    --volume /run/dbus:/run/dbus:ro
-  )
-fi
 
-if [[ -f "$HOST_XAUTHORITY" ]]; then
-  docker_args+=(
-    --env XAUTHORITY=/tmp/.Xauthority
-    --volume "$HOST_XAUTHORITY:/tmp/.Xauthority:ro"
-  )
-else
-  command -v xhost >/dev/null 2>&1 || {
-    echo "Could not find xhost. Install x11-xserver-utils or set XAUTHORITY." >&2
-    exit 1
-  }
-  xhost +si:localuser:root >/dev/null
-  trap 'xhost -si:localuser:root >/dev/null 2>&1 || true' EXIT
-fi
+
+command -v xhost >/dev/null 2>&1 || {
+  echo "Could not find xhost. Install x11-xserver-utils." >&2
+  exit 1
+}
+xhost +si:localuser:root >/dev/null 2>&1 || {
+  echo "Could not authorize the Docker window on the X11 display." >&2
+  exit 1
+}
+trap 'xhost -si:localuser:root >/dev/null 2>&1 || true' EXIT
 
 docker run "${docker_args[@]}" "$IMAGE_NAME"

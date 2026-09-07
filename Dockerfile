@@ -19,4 +19,4 @@ RUN npm ci --omit=optional --no-audit --no-fund --loglevel=error && node node_mo
 COPY src ./src
 COPY README.md ./README.md
 
-CMD ["dbus-run-session", "--", "npm", "start", "--", "--no-sandbox", "--disable-gpu", "--ozone-platform=x11"]
+CMD ["sh", "-c", "exec dbus-run-session -- npm start -- --no-sandbox --disable-gpu --disable-gpu-compositing --in-process-gpu --ozone-platform=x11 2>/dev/null"]
