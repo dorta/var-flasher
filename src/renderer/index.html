@@ -37,7 +37,7 @@
 
       <section class="slide" aria-labelledby="image-title"><div class="panel image-panel">
         <div class="panel-head"><div><p class="eyebrow">Step 2</p><h2 id="image-title" data-i18n="selectImage">Select a recovery image</h2><p id="catalogStatus" class="status">Choose an OS to view compatible releases.</p></div></div>
-        <div class="filters"><label>SOM<input id="selectedSom" type="text" readonly></label><label>OS<select id="os" disabled><option value="" data-i18n="chooseOs">Choose an OS</option></select></label></div>
+        <div class="filters"><div class="chosen-som"><span>SOM</span><strong id="selectedSom">—</strong></div><label>OS<select id="os" disabled><option value="" data-i18n="chooseOs">Choose an OS</option></select></label></div>
         <div id="releases" class="release-list"></div>
         <div class="slide-actions"><button id="backImage" class="quiet" type="button" data-i18n="back">Back</button><span id="imageHint" class="status">Choose a release to continue.</span><button id="nextImage" class="primary" type="button" disabled data-i18n="next">Next</button></div>
       </div></section>
