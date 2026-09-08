@@ -10,6 +10,10 @@ const copy = {
   'zh-CN': {language:'语言',buySom:'购买 SOM',documentation:'文档',heroTitle:'放心写入 Variscite 镜像。',heroSubtitle:'选择镜像和 SD 卡，并验证每一个字节。',image:'镜像',target:'目标',flash:'写入',chooseRelease:'选择版本',chooseCard:'选择 SD 卡',writeVerify:'写入并验证',stepOne:'步骤 1',stepTwo:'步骤 2',stepThree:'步骤 3',selectImage:'选择恢复镜像',selectTarget:'选择目标设备',reviewFlash:'确认并写入',refresh:'刷新',chooseSom:'选择 SOM',chooseOs:'选择操作系统',next:'下一步',back:'返回',flashImage:'写入镜像',cancel:'取消',continue:'继续'}
 };
 const language = $('language'); language.value = localStorage.getItem('var-flasher-language') || 'en-US';
+const themeToggle = $('themeToggle');
+function applyTheme(theme){ const light=theme==='light'; document.documentElement.dataset.theme=light?'light':'dark'; themeToggle.textContent=light?'Dark theme':'Light theme'; themeToggle.setAttribute('aria-pressed', String(light)); }
+applyTheme(localStorage.getItem('var-flasher-theme') || 'dark');
+themeToggle.onclick=()=>{ const next=document.documentElement.dataset.theme==='light'?'dark':'light'; localStorage.setItem('var-flasher-theme',next); applyTheme(next); };
 const t = (key, values={}) => (copy[language.value]?.[key] || copy['en-US'][key] || key).replace(/\{(\w+)\}/g, (_, k) => values[k] ?? '');
 const escapeHtml = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const formatBytes = n => n ? `${(n / 1073741824).toFixed(2)} GB` : '—';
