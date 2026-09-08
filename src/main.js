@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain, screen } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, screen, Menu } = require('electron');
 const path = require('node:path');
 const { listReleases, releaseDetails } = require('./catalog');
 const { listDevices } = require('./devices');
@@ -31,6 +31,7 @@ ipcMain.handle('image:choose', async () => {
 });
 
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(null);
   createWindow();
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
