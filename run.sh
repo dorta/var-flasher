@@ -23,12 +23,6 @@ docker build --pull --progress=quiet --tag "$IMAGE_NAME" "$ROOT_DIR" || {
   exit 1
 }
 
-if [[ $(id -u) -ne 0 ]]; then
-  command -v sudo >/dev/null 2>&1 || { echo "sudo is required to authorize SD-card writing." >&2; exit 1; }
-  echo "Administrator authentication is required before Var Flasher can access removable disks."
-  sudo -v
-fi
-
 command -v xhost >/dev/null 2>&1 || {
   echo "Could not find xhost. Install x11-xserver-utils." >&2
   exit 1

@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to publish
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Build and publish latest release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validate source
+        run: |
+          npm ci --omit=optional --ignore-scripts --no-audit --no-fund
+          find src -name '*.js' -print0 | xargs -0 -n1 node --check
+          bash -n run.sh
+
+      - name: Build release container
+        run: docker build --pull --tag var-flasher:${{ inputs.tag || github.ref_name }} .
+
+      - name: Publish latest GitHub release and prune prior releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release edit "$RELEASE_TAG" --title "Variscite Flasher Tool $RELEASE_TAG" --latest
+          else
+            gh release create "$RELEASE_TAG" --title "Variscite Flasher Tool $RELEASE_TAG" --generate-notes --latest
+          fi
+          gh release list --limit 100 --json tagName --jq '.[].tagName' | while IFS= read -r tag; do
+            if [ "$tag" != "$RELEASE_TAG" ]; then
+              gh release delete "$tag" --yes
+            fi
+          done

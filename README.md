@@ -1,21 +1,70 @@
-# Var Flasher
+<p align="center">
+  <img src="./src/renderer/variscite-logo.svg" width="260" alt="Variscite">
+</p>
 
-Linux-first desktop application for browsing Variscite recovery images, downloading a selected release, and writing it safely to an SD card.
+<h1 align="center">Variscite Flasher Tool</h1>
 
-The Linux prototype uses Electron for the interface. It reads the public Variscite release catalog, follows recovery-package pages, downloads `.tar.zst` artifacts, extracts the recovery image, detects removable disks, asks for administrator authorization at startup, unmounts the target, writes it, flushes it, and reads it back for SHA-256 verification.
+<p align="center">
+  Linux-first desktop tool for selecting, downloading, verifying, and safely writing Variscite recovery images to removable SD cards.
+</p>
 
-## Run with Docker
+<p align="center">
+  <a href="./LICENSE">BSD-3-Clause</a> · <a href="./CHANGELOG.md">Changelog</a>
+</p>
 
-Docker is the only runtime requirement for the Linux prototype. From the repository directory:
+> Status: **0.1.0** — Linux prototype. The interface is structured so native Windows and macOS backends can be added without changing the user flow.
+
+## What it does
+
+1. Lists supported Variscite System-on-Modules (SOMs).
+2. Shows compatible operating systems and recovery releases.
+3. Downloads the selected recovery artifact and validates its SHA-256 checksum when available.
+4. Offers only whole, removable, writable disks detected by `lsblk`.
+5. Requires an explicit confirmation before erasing the selected target, then writes, flushes, and verifies it by reading it back.
+
+The catalog is sourced from the public Variscite release pages. Downloaded artifacts are cached locally so verified images can be reused.
+
+## Run on Linux
+
+Docker is the only required application runtime. You also need an X11 graphical session and permission to use Docker.
+
+```sh
+git clone git@github.com:dorta/var-flasher.git
+cd var-flasher
+./run.sh
+```
+
+`run.sh` builds the image and opens the desktop application. It cleans up the temporary container when the window closes or when you press `Ctrl+C` in the terminal.
+
+## Safety model
+
+Flashing a disk is destructive. Review the selected device carefully before confirming:
+
+- Partitions are never shown as targets; only removable whole disks are eligible.
+- Read-only and zero-size devices are excluded.
+- The device is scanned again just before writing and matched by path, major/minor number, and serial number.
+- Mounted partitions are unmounted before writing.
+- The image is synced and read back for integrity verification.
+
+Do not use this tool for a disk you have not physically identified. A wrong target can permanently destroy data.
+
+## Development and CI
+
+The supported local command is still only:
 
 ```sh
 ./run.sh
 ```
 
-The script builds the application image and starts the desktop app with access to the graphical session and removable devices. The application must be treated as a disk-writing tool: selecting the wrong device can destroy data.
+GitHub Actions validates JavaScript syntax, shell syntax, and the Docker image for every push and pull request. A pushed `v*` tag creates the GitHub release, marks it as **Latest**, and removes older release records while preserving their tags and source history.
 
-## Safety
+## Project links
 
-The app only presents whole disks marked removable by `lsblk`, never partitions. Before writing it re-scans the device and compares its path, major/minor identifier, and serial number. Writing always requires a confirmation and erases the selected disk.
+- [Buy a Variscite SOM](https://www.variscite.com/product/system-on-module-som/)
+- [Variscite documentation](https://dev.variscite.com/)
+- [Changelog](./CHANGELOG.md)
+- [License](./LICENSE)
 
-The app is intentionally run through Docker with `./run.sh`; host-side `npm start` is not supported. This is currently a Linux prototype, with the download/catalog and flashing services kept separate so Windows and macOS can be added later. Never write to a device unless its path and contents have been verified; selecting the wrong block device can destroy data.
+## License
+
+Released under the [BSD 3-Clause License](./LICENSE).
