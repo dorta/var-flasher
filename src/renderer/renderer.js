@@ -1,5 +1,7 @@
 const state = { releases: [], selectedRelease: null, selectedDevice: null, downloaded: null, busy: false };
 const $ = (id) => document.getElementById(id);
+function updateClock() { const now=new Date(); const clock=$('clock'); clock.dateTime=now.toISOString(); clock.textContent=new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(now); }
+updateClock(); setInterval(updateClock,60000);
 const escapeHtml = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const formatBytes = (n) => n ? `${(n / 1073741824).toFixed(2)} GB` : 'unknown size';
 function ask(message, title='Please confirm') { return new Promise(resolve => { const modal=$('modal'); $('modalTitle').textContent=title; $('modalMessage').textContent=message; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); const finish=value=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');resolve(value)}; $('modalConfirm').onclick=()=>finish(true); $('modalCancel').onclick=()=>finish(false); }); }
