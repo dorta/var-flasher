@@ -34,6 +34,7 @@ jobs:
           npm ci --omit=optional --ignore-scripts --no-audit --no-fund
           find src -name '*.js' -print0 | xargs -0 -n1 node --check
           bash -n run.sh
+          bash -n install.sh
 
       - name: Build release container
         run: docker build --pull --tag var-flasher:${{ inputs.tag || github.ref_name }} .
@@ -48,6 +49,7 @@ jobs:
           else
             gh release create "$RELEASE_TAG" --title "Variscite Flasher Tool $RELEASE_TAG" --generate-notes --latest
           fi
+          gh release upload "$RELEASE_TAG" install.sh#var-flasher-installer.sh --clobber
           gh release list --limit 100 --json tagName --jq '.[].tagName' | while IFS= read -r tag; do
             if [ "$tag" != "$RELEASE_TAG" ]; then
               gh release delete "$tag" --yes

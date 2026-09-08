@@ -12,7 +12,7 @@
   <a href="./LICENSE">BSD-3-Clause</a> · <a href="./CHANGELOG.md">Changelog</a>
 </p>
 
-> Status: **0.1.0** — Linux prototype. The interface is structured so native Windows and macOS backends can be added without changing the user flow.
+> Status: **0.2.0** — Linux prototype. The interface is structured so native Windows and macOS backends can be added without changing the user flow.
 
 ## What it does
 
@@ -24,13 +24,37 @@
 
 The catalog is sourced from the public Variscite release pages. Downloaded artifacts are cached locally so verified images can be reused.
 
-## Run on Linux
+## Install on Linux
 
-Docker is the only required application runtime. You also need an X11 graphical session and permission to use Docker.
+The app needs Docker, an X11 graphical session, and permission to use Docker. Since this repository is private, GitHub requires a personal access token with read access to the repository for the one-line installer.
 
 ```sh
-git clone git@github.com:dorta/var-flasher.git
-cd var-flasher
+export GITHUB_TOKEN="your_github_token"
+curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" https://raw.githubusercontent.com/dorta/var-flasher/main/install.sh | GITHUB_TOKEN="$GITHUB_TOKEN" bash
+```
+
+This installs the current release under `~/.local/share/var-flasher` and creates `~/.local/bin/var-flasher`. Ensure `~/.local/bin` is in your `PATH`, then launch it with:
+
+```sh
+var-flasher
+```
+
+### Installed commands
+
+```sh
+var-flasher             # open the desktop application
+var-flasher --update    # fetch and activate the latest GitHub release
+var-flasher --uninstall # remove the application, versions, and local image cache
+var-flasher --version   # print the installed version
+```
+
+The installer does not persist your GitHub token. Export it again when running `var-flasher --update`, unless Git SSH access to `git@github.com:dorta/var-flasher.git` is configured.
+
+### Run from a clone
+
+For development only:
+
+```sh
 ./run.sh
 ```
 
