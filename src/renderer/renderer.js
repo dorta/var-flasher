@@ -11,7 +11,7 @@ const copy = {
 };
 const language = $('language'); language.value = localStorage.getItem('var-flasher-language') || 'en-US';
 const themeToggle = $('themeToggle');
-function applyTheme(theme){ const light=theme==='light'; document.documentElement.dataset.theme=light?'light':'dark'; themeToggle.textContent=light?'Dark theme':'Light theme'; themeToggle.setAttribute('aria-pressed', String(light)); }
+function applyTheme(theme){ const light=theme==='light'; document.documentElement.dataset.theme=light?'light':'dark'; const logo=document.querySelector('.brand-logo'); logo.src=light?logo.dataset.lightSrc:logo.dataset.darkSrc; themeToggle.textContent=light?'Dark theme':'Light theme'; themeToggle.setAttribute('aria-pressed', String(light)); }
 applyTheme(localStorage.getItem('var-flasher-theme') || 'dark');
 themeToggle.onclick=()=>{ const next=document.documentElement.dataset.theme==='light'?'dark':'light'; localStorage.setItem('var-flasher-theme',next); applyTheme(next); };
 const t = (key, values={}) => (copy[language.value]?.[key] || copy['en-US'][key] || key).replace(/\{(\w+)\}/g, (_, k) => values[k] ?? '');
