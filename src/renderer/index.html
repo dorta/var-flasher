@@ -7,7 +7,7 @@
   <nav class="steps" aria-label="Flashing steps"><div class="step active" id="step1"><span>1</span><div><strong>Image</strong><small>Choose a release</small></div></div><i></i><div class="step" id="step2"><span>2</span><div><strong>Target</strong><small>Select an SD card</small></div></div><i></i><div class="step" id="step3"><span>3</span><div><strong>Flash</strong><small>Write and verify</small></div></div></nav>
   <section class="workspace">
     <div class="panel image-panel"><div class="panel-head"><div><p class="eyebrow">STEP 1</p><h2>Select a recovery image</h2><p id="catalogStatus" class="muted">Loading catalog...</p></div><button id="refreshCatalog" class="quiet">Refresh</button></div>
-      <div class="filters"><label>Search<input id="search" placeholder="Search SOM, OS or release"></label><label>SOM<select id="som"><option value="">All SOMs</option></select></label><label>OS<select id="os"><option value="">All OSes</option></select></label></div>
+      <div class="filters"><label>SOM<select id="som"><option value="">Choose a SOM</option></select></label><label>OS<select id="os" disabled><option value="">Choose an OS</option></select></label></div>
       <div id="releases" class="release-list"></div>
     </div>
     <div class="panel target-panel locked" id="targetPanel"><div class="panel-lock">Select a release first</div><div class="panel-head"><div><p class="eyebrow">STEP 2</p><h2>Select target</h2><p id="deviceStatus" class="muted">Scanning removable devices...</p></div><button id="refreshDevices" class="quiet">Refresh</button></div><div id="devices" class="device-list"></div><p class="warning">Writing erases the selected disk completely.</p></div>
