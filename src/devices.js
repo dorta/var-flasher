@@ -17,7 +17,7 @@ function listDevices() {
         removable: d.rm === true || d.rm === '1',
         readOnly: d.ro === true || d.ro === '1',
         mountpoints: (d.mountpoints || []).filter(Boolean),
-      })).filter((d) => d.removable && !d.readOnly);
+      })).filter((d) => d.removable && !d.readOnly && !/^0+(?:B)?$/i.test(String(d.size).replace(/\s/g, '')) && String(d.size).toUpperCase() !== '0B');
       resolve(devices);
     });
   });
