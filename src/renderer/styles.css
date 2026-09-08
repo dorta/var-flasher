@@ -29,7 +29,7 @@ button { cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #20201f;
+  background: var(--background);
   border-bottom: 1px solid var(--line);
 }
 .brand-logo { width: 142px; height: auto; display: block; }
