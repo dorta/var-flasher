@@ -10,6 +10,7 @@ function listDevices() {
         name: d.name,
         path: d.path || '/dev/' + d.name,
         size: d.size || 'unknown',
+        sizeBytes: Number(d.sizebytes || d.size_bytes || 0),
         model: (d.model || 'Unknown device').trim(),
         transport: d.tran || 'unknown',
         majorMinor: d['maj:min'] || null,
@@ -17,7 +18,7 @@ function listDevices() {
         removable: d.rm === true || d.rm === '1',
         readOnly: d.ro === true || d.ro === '1',
         mountpoints: (d.mountpoints || []).filter(Boolean),
-      })).filter((d) => d.removable && !d.readOnly && !/^0+(?:B)?$/i.test(String(d.size).replace(/\s/g, '')) && String(d.size).toUpperCase() !== '0B');
+      })).filter((d) => d.removable && !d.readOnly && Number(d.sizeBytes) > 0);
       resolve(devices);
     });
   });
