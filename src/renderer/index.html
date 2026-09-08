@@ -1,17 +1,100 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Var Flasher</title><link rel="stylesheet" href="./styles.css"></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Var Flasher</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
 <body>
-<header class="topbar"><div class="brand"><img class="brand-logo" src="./variscite-logo-white.svg" alt="Variscite"><strong>Var Flasher</strong></div><div class="header-tools"><select id="language" aria-label="Language"><option value="en-US">English</option><option value="es-ES">Español</option><option value="fr-FR">Français</option><option value="it-IT">Italiano</option><option value="de-DE">Deutsch</option><option value="ja-JP">日本語</option><option value="zh-CN">简体中文</option></select><time class="platform" id="clock" datetime=""></time></div></header>
-<main class="app-shell">
-  <section class="hero"><h1>Flash Variscite images<br>with confidence.</h1><p class="muted">Select an image, choose an SD card, then write and verify every byte.</p></section>
-  <nav class="steps" aria-label="Flashing steps"><div class="step active" id="step1"><span>1</span><div><strong>Image</strong><small>Choose a release</small></div></div><i></i><div class="step" id="step2"><span>2</span><div><strong>Target</strong><small>Select an SD card</small></div></div><i></i><div class="step" id="step3"><span>3</span><div><strong>Flash</strong><small>Write and verify</small></div></div></nav>
-  <section class="workspace">
-    <div class="panel image-panel"><div class="panel-head"><div><p class="eyebrow">STEP 1</p><h2>Select a recovery image</h2><p id="catalogStatus" class="muted">Loading catalog...</p></div><button id="refreshCatalog" class="quiet">Refresh</button></div>
-      <div class="filters"><label>SOM<select id="som"><option value="">Choose a SOM</option></select></label><label>OS<select id="os" disabled><option value="">Choose an OS</option></select></label></div>
-      <div id="releases" class="release-list"></div>
+  <header class="topbar">
+    <img class="brand-logo" src="./variscite-logo-white.svg" alt="Variscite">
+    <div class="header-tools">
+      <label class="language-control" for="language">Language
+        <select id="language" aria-label="Language">
+          <option value="en-US">English</option>
+          <option value="es-ES">Español</option>
+          <option value="fr-FR">Français</option>
+          <option value="it-IT">Italiano</option>
+          <option value="de-DE">Deutsch</option>
+          <option value="ja-JP">日本語</option>
+          <option value="zh-CN">中文</option>
+        </select>
+      </label>
+      <time id="clock" datetime=""></time>
     </div>
-    <div class="panel target-panel locked" id="targetPanel"><div class="panel-lock">Select a release first</div><div class="panel-head"><div><p class="eyebrow">STEP 2</p><h2>Select target</h2><p id="deviceStatus" class="muted">Scanning removable devices...</p></div><button id="refreshDevices" class="quiet">Refresh</button></div><div id="devices" class="device-list"></div><p class="warning">Writing erases the selected disk completely.</p></div>
-  </section>
-  <section class="action-bar"><div class="selection"><div class="selection-icon">✓</div><div><p class="eyebrow">READY WHEN YOU ARE</p><h2 id="selectionTitle">Select an image and target</h2><p id="selectionStatus" class="muted">Nothing will be written until you confirm.</p></div></div><button id="write" class="flash-button" disabled>Flash image</button></section>
-</main>
-<div id="modal" class="modal" aria-hidden="true"><div class="modal-card"><p class="eyebrow" id="modalEyebrow">CONFIRMATION</p><h2 id="modalTitle">Are you sure?</h2><p id="modalMessage" class="muted"></p><div class="modal-actions"><button id="modalCancel" class="quiet">Cancel</button><button id="modalConfirm" class="flash-button">Continue</button></div></div></div><script src="./renderer.js"></script></body></html>
+  </header>
+
+  <main class="app-shell">
+    <section class="hero">
+      <h1>Flash Variscite images<br>with confidence.</h1>
+      <p>Select an image, choose an SD card, then write and verify every byte.</p>
+    </section>
+
+    <nav class="steps" aria-label="Flashing steps">
+      <div class="step active" id="step1"><span>1</span><div><strong>Image</strong><small>Choose a release</small></div></div>
+      <i></i>
+      <div class="step" id="step2"><span>2</span><div><strong>Target</strong><small>Select an SD card</small></div></div>
+      <i></i>
+      <div class="step" id="step3"><span>3</span><div><strong>Flash</strong><small>Write and verify</small></div></div>
+    </nav>
+
+    <section class="workspace">
+      <section class="panel image-panel" aria-labelledby="image-title">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Step 1</p>
+            <h2 id="image-title">Select a recovery image</h2>
+            <p id="catalogStatus" class="status">Loading catalog…</p>
+          </div>
+          <button id="refreshCatalog" class="quiet" type="button">Refresh</button>
+        </div>
+        <div class="filters">
+          <label>SOM<select id="som"><option value="">Choose a SOM</option></select></label>
+          <label>OS<select id="os" disabled><option value="">Choose an OS</option></select></label>
+        </div>
+        <div id="releases" class="release-list" aria-live="polite"></div>
+      </section>
+
+      <section class="panel target-panel locked" id="targetPanel" aria-labelledby="target-title">
+        <div class="panel-lock">Select a release first</div>
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Step 2</p>
+            <h2 id="target-title">Select target</h2>
+            <p id="deviceStatus" class="status">Scanning removable devices…</p>
+          </div>
+          <button id="refreshDevices" class="quiet" type="button">Refresh</button>
+        </div>
+        <div id="devices" class="device-list" aria-live="polite"></div>
+        <p class="warning">Writing erases the selected disk completely.</p>
+      </section>
+    </section>
+
+    <section class="action-bar" aria-live="polite">
+      <div class="selection">
+        <div class="selection-icon">✓</div>
+        <div class="selection-copy">
+          <p class="eyebrow">Ready when you are</p>
+          <h2 id="selectionTitle">Select an image and target</h2>
+          <p id="selectionStatus" class="status">Nothing will be written until you confirm.</p>
+        </div>
+      </div>
+      <button id="write" class="flash-button" type="button" disabled>Flash image</button>
+    </section>
+  </main>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <p class="eyebrow" id="modalEyebrow">Confirmation</p>
+      <h2 id="modalTitle">Are you sure?</h2>
+      <p id="modalMessage" class="status"></p>
+      <div class="modal-actions">
+        <button id="modalCancel" class="quiet" type="button">Cancel</button>
+        <button id="modalConfirm" class="flash-button" type="button">Continue</button>
+      </div>
+    </div>
+  </div>
+  <script src="./renderer.js"></script>
+</body>
+</html>

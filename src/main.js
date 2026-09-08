@@ -6,12 +6,12 @@ const { download, writeImage } = require('./images');
 
 function createWindow() {
   const workArea = screen.getPrimaryDisplay().workAreaSize;
-  const preset = workArea.width >= 3000 ? { width: 1360, height: 1000 } : workArea.width >= 1800 ? { width: 1200, height: 850 } : { width: 1040, height: 760 };
+  const preset = workArea.width >= 3000 ? { width: 1360, height: 900 } : workArea.width >= 1800 ? { width: 1200, height: 820 } : { width: 1040, height: 720 };
   const width = Math.min(preset.width, workArea.width);
   const height = Math.min(preset.height, workArea.height);
   const window = new BrowserWindow({
     width, height, center: true, resizable: false, maximizable: false, fullscreenable: false,
-    backgroundColor: '#f7f7f7',
+    backgroundColor: '#171717',
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
   window.loadFile(path.join(__dirname, 'renderer/index.html')).catch((error) => console.error('Renderer load failed:', error));
