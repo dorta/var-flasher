@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain, screen, Menu } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, screen, Menu, shell } = require('electron');
 const path = require('node:path');
 const { listReleases, releaseDetails } = require('./catalog');
 const { listDevices } = require('./devices');
@@ -10,10 +10,11 @@ function createWindow() {
   const width = Math.min(preset.width, workArea.width);
   const height = Math.min(preset.height, workArea.height);
   const window = new BrowserWindow({
-    width, height, center: true, resizable: false, maximizable: false, fullscreenable: false,
+    width, height, title: 'Variscite Flasher Tool', center: true, resizable: false, minimizable: false, maximizable: false, fullscreenable: false,
     backgroundColor: '#171717',
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
+  window.webContents.setWindowOpenHandler(({ url }) => { shell.openExternal(url); return { action: 'deny' }; });
   window.loadFile(path.join(__dirname, 'renderer/index.html')).catch((error) => console.error('Renderer load failed:', error));
   window.webContents.on('did-fail-load', (_event, code, description) => {
     console.error('Renderer failed to load:', code, description);
