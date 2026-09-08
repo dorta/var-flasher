@@ -10,7 +10,7 @@ function createWindow() {
   const width = Math.min(preset.width, workArea.width);
   const height = Math.min(preset.height, workArea.height);
   const window = new BrowserWindow({
-    width, height, resizable: false, maximizable: false, fullscreenable: false,
+    width, height, center: true, resizable: false, maximizable: false, fullscreenable: false,
     backgroundColor: '#f7f7f7',
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false },
   });
