@@ -6,7 +6,7 @@ const { download, writeImage } = require('./images');
 
 function createWindow() {
   const workArea = screen.getPrimaryDisplay().workAreaSize;
-  const preset = workArea.width >= 3000 ? { width: 1920, height: 1080 } : workArea.width >= 1800 ? { width: 1440, height: 810 } : { width: 1280, height: 720 };
+  const preset = workArea.width >= 3000 ? { width: 1440, height: 810 } : workArea.width >= 1800 ? { width: 1280, height: 720 } : { width: 1100, height: 720 };
   const width = Math.min(preset.width, workArea.width);
   const height = Math.min(preset.height, workArea.height);
   const window = new BrowserWindow({
