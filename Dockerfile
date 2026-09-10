@@ -21,6 +21,6 @@ COPY src ./src
 COPY scripts ./scripts
 COPY tests ./tests
 RUN npm test
-COPY README.md ./README.md
+COPY README.adoc ./README.adoc
 
 CMD ["sh", "-c", "exec node ./node_modules/electron/cli.js . --no-sandbox --disable-gpu --disable-gpu-compositing --in-process-gpu --disable-logging --log-level=3 --ozone-platform=x11"]
