@@ -3,10 +3,14 @@ const formatSize = (bytes) => { if (!bytes) return '0 B'; const units=['B','KB',
 
 function listDevices() {
   return new Promise((resolve, reject) => {
-    execFile('lsblk', ['-b', '-J', '-o', 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MAJ:MIN,SERIAL,MOUNTPOINTS'], { timeout: 10000 }, (error, stdout, stderr) => {
+    execFile('lsblk', ['-b', '-J', '-o', 'NAME,PATH,TYPE,RM,RO,SIZE,MODEL,TRAN,MAJ:MIN,SERIAL,WWN,MOUNTPOINTS'], { timeout: 10000 }, (error, stdout, stderr) => {
       if (error) return reject(new Error(stderr.trim() || error.message));
       let data;
       try { data = JSON.parse(stdout); } catch (parseError) { return reject(parseError); }
+      const collectMountpoints = (node) => [
+        ...(node.mountpoints || []).filter(Boolean),
+        ...(node.children || []).flatMap(collectMountpoints),
+      ];
       const devices = (data.blockdevices || []).filter((d) => d.type === 'disk').map((d) => ({
         name: d.name,
         path: d.path || '/dev/' + d.name,
@@ -16,9 +20,10 @@ function listDevices() {
         transport: d.tran || 'unknown',
         majorMinor: d['maj:min'] || null,
         serial: (d.serial || '').trim() || null,
+        wwn: (d.wwn || '').trim() || null,
         removable: d.rm === true || d.rm === '1',
         readOnly: d.ro === true || d.ro === '1',
-        mountpoints: (d.mountpoints || []).filter(Boolean),
+        mountpoints: [...new Set(collectMountpoints(d))],
       })).filter((d) => d.removable && !d.readOnly && Number(d.sizeBytes) > 0);
       resolve(devices);
     });

@@ -9,20 +9,12 @@
 <body>
   <header class="topbar">
     <img class="brand-logo" src="./variscite-logo-white.svg" data-dark-src="./variscite-logo-white.svg" data-light-src="./variscite-logo.svg" alt="Variscite">
-    <nav class="site-links" aria-label="Variscite links">
-      <a href="https://www.variscite.com/product/system-on-module-som/" target="_blank" rel="noreferrer" data-i18n="buySom">Buy a SOM</a>
-      <a href="https://dev.variscite.com/" target="_blank" rel="noreferrer" data-i18n="documentation">Documentation</a>
-    </nav>
-    <div class="header-tools"><button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false">Light theme</button>
-      <label for="language"><span data-i18n="language">Language</span><select id="language"><option value="en-US">English</option><option value="pt-BR">Português</option><option value="es-ES">Español</option><option value="fr-FR">Français</option><option value="it-IT">Italiano</option><option value="de-DE">Deutsch</option><option value="ja-JP">日本語</option><option value="zh-CN">中文</option></select></label>
-      <time id="clock"></time>
-    </div>
   </header>
 
   <main class="app-shell">
     <section class="hero"><h1 data-i18n="heroTitle">Flash Variscite images with confidence.</h1><p data-i18n="heroSubtitle">Select an image, choose an SD card, then write and verify every byte.</p></section>
     <nav class="steps" aria-label="Flashing steps">
-      <button class="step active" id="step1" type="button"><span>1</span><div><strong>SOM</strong><small>Choose your module</small></div></button><i></i>
+      <button class="step active" id="step1" type="button"><span>1</span><div><strong>System on Module</strong><small>Choose your module</small></div></button><i></i>
       <button class="step" id="step2" type="button" disabled><span>2</span><div><strong data-i18n="image">Image</strong><small data-i18n="chooseRelease">Choose OS and release</small></div></button><i></i>
       <button class="step" id="step3" type="button" disabled><span>3</span><div><strong data-i18n="target">Target</strong><small data-i18n="chooseCard">Select an SD card</small></div></button><i></i>
       <button class="step" id="step4" type="button" disabled><span>4</span><div><strong data-i18n="flash">Flash</strong><small data-i18n="writeVerify">Write and verify</small></div></button>
@@ -30,16 +22,16 @@
 
     <section class="carousel" aria-live="polite"><div class="slide-track" id="slideTrack">
       <section class="slide" aria-labelledby="som-title"><div class="panel som-panel">
-        <div class="panel-head"><div><p class="eyebrow">Step 1</p><h2 id="som-title">Choose a SOM</h2><p id="somStatus" class="status">Loading supported modules…</p></div><button id="refreshCatalog" class="quiet" type="button" data-i18n="refresh">Refresh</button></div>
-        <div class="som-layout"><div class="som-choice"><label>SOM<select id="som"><option value="">Choose a SOM</option></select></label><p class="status">Select the module you are going to flash.</p></div><article id="somPreview" class="som-preview empty-preview"><p>Select a SOM to see its photo and basic specifications.</p></article></div>
-        <div class="slide-actions"><span class="status" id="somHint">Choose a SOM to continue.</span><button id="nextSom" class="primary" type="button" disabled data-i18n="next">Next</button></div>
+        <div class="panel-head"><div><p class="eyebrow">Step 1</p><h2 id="som-title">Choose a System on Module</h2></div><p id="somStatus" class="status panel-count">Loading supported modules…</p></div>
+        <div class="som-layout"><div class="som-choice"><label class="sr-only">Module</label><div class="som-combobox"><button id="somTrigger" type="button" class="som-trigger" role="combobox" aria-expanded="false" aria-controls="somMenu"><span id="somValue">Select a module</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button><div id="somMenu" class="som-menu" role="listbox" hidden></div><select id="som" class="native-som" tabindex="-1" aria-hidden="true"><option value="">Select a module</option></select></div></div><article id="somPreview" class="som-preview empty-preview"><p>Select a module to view its photo and specifications.</p></article></div>
+        <div class="slide-actions slide-actions-end"><span id="somHint" hidden></span><button id="nextSom" class="primary" type="button" disabled data-i18n="next">Next</button></div>
       </div></section>
 
       <section class="slide" aria-labelledby="image-title"><div class="panel image-panel">
-        <div class="panel-head"><div><p class="eyebrow">Step 2</p><h2 id="image-title" data-i18n="selectImage">Select a recovery image</h2><p id="catalogStatus" class="status">Choose an OS to view compatible releases.</p></div></div>
-        <div class="filters"><div class="chosen-som"><span>SOM</span><strong id="selectedSom">—</strong></div><label>OS<select id="os" disabled><option value="" data-i18n="chooseOs">Choose an OS</option></select></label></div>
+        <div class="panel-head"><div><p class="eyebrow">Step 2</p><h2 id="image-title" data-i18n="selectImage">Choose an OS image</h2><p id="catalogStatus" class="status">Choose an OS to view compatible releases.</p></div><div class="selected-som-summary"><span>Selected SOM</span><strong id="selectedSom">—</strong></div></div>
+        <div class="filters"><label>Operating system<select id="os" disabled><option value="" data-i18n="chooseOs">Choose an OS</option></select></label></div>
         <div id="releases" class="release-list"></div>
-        <div class="slide-actions"><button id="backImage" class="quiet" type="button" data-i18n="back">Back</button><span id="imageHint" class="status">Choose a release to continue.</span><button id="nextImage" class="primary" type="button" disabled data-i18n="next">Next</button></div>
+        <div class="slide-actions"><button id="backImage" class="quiet" type="button" data-i18n="back">Back</button><span id="imageHint" class="status"></span><button id="nextImage" class="primary" type="button" disabled data-i18n="next">Next</button></div>
       </div></section>
 
       <section class="slide" aria-labelledby="target-title"><div class="panel target-panel">
@@ -50,13 +42,58 @@
 
       <section class="slide" aria-labelledby="review-title"><div class="panel review-panel">
         <div><p class="eyebrow">Step 4</p><h2 id="review-title" data-i18n="reviewFlash">Review and flash</h2><p class="status" data-i18n="reviewHint">Confirm the image and target before writing.</p></div>
-        <div class="review-summary"><div><span>SOM</span><strong id="reviewSom">—</strong></div><div><span data-i18n="image">Image</span><strong id="reviewImage">—</strong></div><div><span data-i18n="target">Target</span><strong id="reviewTarget">—</strong></div><div><span data-i18n="verification">Verification</span><strong data-i18n="verificationValue">Download checksum and written data will be verified.</strong></div></div>
+        <div class="review-summary"><div><span>SOM</span><strong id="reviewSom">—</strong></div><div><span data-i18n="image">Image</span><strong id="reviewImage">—</strong></div><div><span data-i18n="target">Target</span><strong id="reviewTarget">—</strong></div><div><span data-i18n="verification">Verification</span><strong data-i18n="verificationValue">The downloaded image and written data will be verified.</strong></div></div>
         <p id="flashStatus" class="status" data-i18n="readyFlash">Ready to write.</p>
+        <section id="transferProgress" class="transfer-progress" hidden aria-live="polite">
+          <div class="progress-head"><strong id="progressPhase">Preparing</strong><span id="progressPercent">0%</span></div>
+          <div class="progress-track" role="progressbar" aria-label="Transfer progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="progressBar"></i></div>
+          <div class="progress-meta"><span id="progressBytes">0 B / —</span><span id="progressSpeed">—</span><span id="progressEta">—</span></div>
+        </section>
+        <section id="flashComplete" class="flash-complete" hidden aria-live="assertive">
+          <div class="complete-mark" aria-hidden="true">✓</div>
+          <div class="complete-copy"><p class="eyebrow">Completed</p><h3>Flash complete</h3><p>The image was written and verified successfully. It is safe to remove the SD card.</p></div>
+          <dl class="complete-details"><div><dt>Written</dt><dd id="completeBytes">—</dd></div><div><dt>Target</dt><dd id="completeTarget">—</dd></div><div><dt>SHA-256</dt><dd id="completeHash">—</dd></div></dl>
+          <div class="complete-actions"><button id="flashAnother" class="quiet" type="button">Flash another image</button><button id="closeApp" class="primary" type="button">Close</button></div>
+        </section>
         <div class="slide-actions"><button id="backReview" class="quiet" type="button" data-i18n="back">Back</button><button id="write" class="primary danger" type="button" disabled data-i18n="flashImage">Flash image</button></div>
       </div></section>
     </div></section>
+  </main>
+
+  <footer class="app-footer">
+    <nav class="site-links" aria-label="Variscite links">
+      <a href="https://shop.variscite.com/" target="_blank" rel="noreferrer" data-i18n="buySom">Buy a SOM</a>
+      <a href="https://dev.variscite.com/" target="_blank" rel="noreferrer" data-i18n="documentation">Documentation</a>
+    </nav>
+    <span class="footer-copyright">© 2026 Variscite Ltd.</span>
+    <div class="header-tools"><button id="themeToggle" class="theme-toggle" type="button" role="switch" aria-checked="false">
+        <span class="theme-toggle-track" aria-hidden="true"><svg class="theme-sun" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.36 6.36-1.42-1.42M7.05 7.05 5.64 5.64m12.72 0-1.42 1.41M7.05 16.95l-1.41 1.41M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/></svg><span class="theme-toggle-thumb"><svg id="themeIcon" viewBox="0 0 24 24"><path></path></svg></span><svg class="theme-moon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg></span>
+        <span id="themeLabel" class="sr-only">Switch theme</span>
+      </button>
+      <div class="language-picker"><span data-i18n="language">Language</span><div class="language-combobox">
+        <button id="languageTrigger" class="language-trigger" type="button" role="combobox" aria-expanded="false" aria-controls="languageMenu"><span id="languageValue">English</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 10 4-4 4 4"/></svg></button>
+        <div id="languageMenu" class="language-menu" role="listbox" hidden><button type="button" data-value="en-US">English</button><button type="button" data-value="pt-BR">Português</button><button type="button" data-value="es-ES">Español</button><button type="button" data-value="fr-FR">Français</button><button type="button" data-value="it-IT">Italiano</button><button type="button" data-value="de-DE">Deutsch</button><button type="button" data-value="ja-JP">日本語</button><button type="button" data-value="zh-CN">中文</button></div>
+        <select id="language" class="native-language" tabindex="-1" aria-hidden="true"><option value="en-US">English</option><option value="pt-BR">Português</option><option value="es-ES">Español</option><option value="fr-FR">Français</option><option value="it-IT">Italiano</option><option value="de-DE">Deutsch</option><option value="ja-JP">日本語</option><option value="zh-CN">中文</option></select>
+      </div></div>
+      <time id="clock"></time>
+    </div>
+  </footer>
+
+  <div id="operationLock" class="operation-lock" hidden aria-live="assertive" aria-busy="true">
+    <section class="operation-card" role="status" aria-labelledby="operationTitle">
+      <span class="operation-spinner" aria-hidden="true"></span>
+      <p id="operationStep" class="eyebrow">Step 1 of 4</p>
+      <h2 id="operationTitle">Preparing download</h2>
+      <p id="operationMessage" class="status">Connecting to the download mirror and calculating the total size.</p>
+      <ol id="operationSteps" class="operation-steps" aria-label="Flash progress"><li>Download</li><li>Extract</li><li>Write</li><li>Verify</li></ol>
+      <div class="operation-track"><i id="operationBar"></i></div>
+      <div class="operation-meta"><span id="operationPercent">Estimating…</span><span id="operationBytes">Calculating total size…</span><span id="operationSpeed">Measuring speed…</span><span id="operationEta">Calculating time…</span></div>
+      <div class="operation-actions"><p id="operationSafety">You can safely cancel before writing starts.</p><button id="cancelOperation" class="quiet" type="button">Cancel download</button></div>
+    </section>
+  </div>
 
   <div id="modal" class="modal" aria-hidden="true"><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><p class="eyebrow" data-i18n="confirmation">Confirmation</p><h2 id="modalTitle">Are you sure?</h2><p id="modalMessage" class="status"></p><div class="modal-actions"><button id="modalCancel" class="quiet" type="button" data-i18n="cancel">Cancel</button><button id="modalConfirm" class="primary danger" type="button" data-i18n="continue">Continue</button></div></div></div>
+  <script src="./som-images.js"></script>
   <script src="./renderer.js"></script>
 </body>
 </html>

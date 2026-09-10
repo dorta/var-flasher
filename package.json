@@ -5,7 +5,8 @@
   "description": "Linux desktop tool for downloading and flashing Variscite recovery images",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "node --test tests/*.test.js"
   },
   "devDependencies": {
     "electron": "^44.2.0"

@@ -2,6 +2,30 @@
 
 All notable changes to Variscite Flasher Tool are documented here.
 
+## Unreleased
+
+### Added
+
+- Responsive HD, Full HD, QHD, and UHD window presets centered on the display under the pointer.
+- Local download-state badges for every visible recovery release.
+- Real-time SHA-256 verification progress and readable transfer-speed metrics.
+
+### Changed
+
+- The desktop application now runs without root privileges; PolicyKit starts a short-lived, network-isolated writer with access only to the selected SD card after explicit authorization.
+- Expanded layouts use the available application width with compact gutters.
+- The OS selector is full-width and the selected SOM remains visible in the panel header.
+- The language menu opens upward from the footer.
+- Progress screens hide unavailable metrics and animate indeterminate work.
+- The public installer discovers releases through the GitHub HTTPS API without requiring a token.
+- The README follows the concise Variscite repository style.
+
+### Fixed
+
+- Host PolicyKit authorization requests are readable by the launcher, allowing the password dialog to open.
+- Persistent cache ownership is restored to the desktop user.
+- Improved dialog and safety-message contrast, the completed-step check icon, the Buy a SOM link, and CI shell validation.
+
 ## [0.2.0] - 2026-09-08
 
 ### Added

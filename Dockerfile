@@ -18,6 +18,9 @@ WORKDIR /opt/var-flasher
 COPY package*.json ./
 RUN npm ci --omit=optional --no-audit --no-fund --loglevel=error && node node_modules/electron/install.js && test -x node_modules/electron/dist/electron
 COPY src ./src
+COPY scripts ./scripts
+COPY tests ./tests
+RUN npm test
 COPY README.md ./README.md
 
 CMD ["sh", "-c", "exec node ./node_modules/electron/cli.js . --no-sandbox --disable-gpu --disable-gpu-compositing --in-process-gpu --disable-logging --log-level=3 --ozone-platform=x11"]

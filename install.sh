@@ -16,21 +16,13 @@ if [[ -n "${GITHUB_TOKEN:-}" ]]; then
 fi
 
 latest_tag() {
-  if [[ -n "${GITHUB_TOKEN:-}" ]]; then
-    local response tag
-    response="$(curl --fail --silent --show-error --location --retry 3 "${request_header[@]}" \
-      -H 'Accept: application/vnd.github+json' "https://api.github.com/repos/$REPOSITORY/releases/latest")" \
-      || fail "Could not read the latest GitHub release."
-    tag="$(printf '%s\n' "$response" | sed -n 's/^[[:space:]]*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*$/\1/p' | head -n1)"
-    [[ -n "$tag" ]] || fail "The latest GitHub release has no version tag."
-    printf '%s\n' "$tag"
-    return
-  fi
-
-  need git
-  local tag
-  tag="$(git ls-remote --tags --refs "git@github.com:$REPOSITORY.git" 'v*' 2>/dev/null | awk -F/ '{print $3}' | sort -V | tail -n1)"
-  [[ -n "$tag" ]] || fail "This private repository needs GITHUB_TOKEN or an SSH key authorized for $REPOSITORY."
+  need curl
+  local response tag
+  response="$(curl --fail --silent --show-error --location --retry 3 "${request_header[@]}" \
+    -H 'Accept: application/vnd.github+json' "https://api.github.com/repos/$REPOSITORY/releases/latest")" \
+    || fail "Could not read the latest public GitHub release."
+  tag="$(printf '%s\n' "$response" | sed -n 's/^[[:space:]]*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*$/\1/p' | head -n1)"
+  [[ -n "$tag" ]] || fail "The repository does not have a published version yet."
   printf '%s\n' "$tag"
 }
 
@@ -50,7 +42,7 @@ install_version() {
     trap 'rm -f "$archive"; rm -rf "$stage"' RETURN
     curl --fail --silent --show-error --location --retry 3 "${request_header[@]}" \
       "https://api.github.com/repos/$REPOSITORY/tarball/$tag" -o "$archive" \
-      || fail "Could not download $tag. Set GITHUB_TOKEN for private GitHub access."
+      || fail "Could not download $tag from GitHub."
     mkdir -p "$stage/source" "$DATA_ROOT/releases"
     tar -xzf "$archive" --strip-components=1 -C "$stage/source" \
       || fail "The release archive could not be extracted."

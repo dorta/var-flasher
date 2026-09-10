@@ -3,13 +3,13 @@ const https = require('node:https');
 const BASE = 'https://dev.variscite.com';
 const FINDER = BASE + '/software-and-security/software-release-finder/';
 
-function request(url, redirects = 0) {
+function requestOnce(url, redirects = 0) {
   return new Promise((resolve, reject) => {
     if (redirects > 5) return reject(new Error('Too many redirects'));
     https.get(url, { headers: { 'User-Agent': 'var-flasher/0.1' } }, (res) => {
       if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location) {
         res.resume();
-        return resolve(request(new URL(res.headers.location, url).href, redirects + 1));
+        return resolve(requestOnce(new URL(res.headers.location, url).href, redirects + 1));
       }
       if (res.statusCode !== 200) {
         res.resume();
@@ -19,8 +19,17 @@ function request(url, redirects = 0) {
       res.setEncoding('utf8');
       res.on('data', (chunk) => { body += chunk; });
       res.on('end', () => resolve(body));
-    }).on('error', reject);
+    }).setTimeout(15000, function onTimeout() { this.destroy(Object.assign(new Error('Catalog request timed out'), { code: 'ETIMEDOUT' })); }).on('error', reject);
   });
+}
+
+async function request(url) {
+  let lastError;
+  for (const delay of [0, 500, 1500]) {
+    if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
+    try { return await requestOnce(url); } catch (error) { lastError = error; }
+  }
+  throw lastError;
 }
 
 function clean(value) {
