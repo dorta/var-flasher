@@ -1,0 +1,43 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2026 Diego Dorta. All rights reserved.
+
+[align=center]
+image::src/renderer/variscite-logo.svg[Variscite, width=320]
+
+[.text-center]
+*Safe recovery-image flashing for Variscite System on Modules*
+
+[.text-center]
+https://github.com/dorta/var-flasher/releases/latest[Latest release] · link:docs/INSTALLATION.md[Installation] · link:docs/SAFETY.md[Safety] · https://dev.variscite.com/[dev.variscite.com]
+
+
+Variscite Flasher Tool is a Linux desktop application for finding official Variscite recovery images and writing them safely to removable SD cards. It verifies both the downloaded image and the data written to the target media.
+
+
+== INSTALLATION
+
+Docker is the only application runtime required. Install the latest published version directly from GitHub:
+
+[source,shell]
+----
+curl -fsSL https://raw.githubusercontent.com/dorta/var-flasher/main/install.sh | bash
+----
+
+Then run:
+
+[source,shell]
+----
+var-flasher
+----
+
+To run directly from a clone, use `./run.sh`. Update or remove an installed copy with `var-flasher --update` or `var-flasher --uninstall`.
+
+
+== SAFETY
+
+Writing an image erases the selected device completely. The application accepts only whole removable disks, confirms the target again immediately before writing, requests administrator authorization only when required, and verifies the written bytes before reporting success. Read the link:docs/SAFETY.md[safety guide] before using important media.
+
+
+== LICENSE
+
+Available under the link:LICENSE[BSD 3-Clause License].
