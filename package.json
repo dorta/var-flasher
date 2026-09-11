@@ -1,6 +1,6 @@
 {
   "name": "var-flasher",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Linux desktop tool for downloading and flashing Variscite recovery images",
   "main": "src/main.js",
@@ -10,5 +10,6 @@
   },
   "devDependencies": {
     "electron": "^44.2.0"
-  }
+  },
+  "license": "Apache-2.0"
 }

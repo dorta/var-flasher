@@ -4,6 +4,13 @@ All notable changes to Variscite Flasher Tool are documented here.
 
 ## Unreleased
 
+## [0.3.1] - 2026-09-11
+
+### Changed
+
+- Simplified README navigation and normalized heading capitalization.
+- Relicensed the project from BSD-3-Clause to Apache-2.0.
+
 ## [0.3.0] - 2026-09-11
 
 ### Added
