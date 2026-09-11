@@ -4,6 +4,8 @@ All notable changes to Variscite Flasher Tool are documented here.
 
 ## Unreleased
 
+## [0.3.0] - 2026-09-11
+
 ### Added
 
 - Responsive HD, Full HD, QHD, and UHD window presets centered on the display under the pointer.
