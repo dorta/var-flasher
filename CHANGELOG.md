@@ -4,6 +4,17 @@ All notable changes to Variscite Flasher Tool are documented here.
 
 ## Unreleased
 
+## [0.3.3] - 2026-09-14
+
+### Changed
+
+- Docker builds use a dedicated project builder so their cache can be removed safely.
+- Uninstall removes all project containers, images, installed versions, and runtime data.
+
+### Fixed
+
+- Uninstall verifies Docker cleanup before reporting complete removal.
+
 ## [0.3.2] - 2026-09-14
 
 ### Changed
