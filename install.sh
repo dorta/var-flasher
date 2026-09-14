@@ -10,6 +10,29 @@ CACHE_ROOT="$HOME/.var-flasher"
 fail() { printf '%s\n' "Variscite Flasher Tool: $*" >&2; exit 1; }
 need() { command -v "$1" >/dev/null 2>&1 || fail "Missing required command: $1"; }
 
+image_name_for_source() {
+  local source_dir="$1" version
+  version="$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$source_dir/package.json" | head -n1)"
+  [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]] \
+    || fail "The release has an invalid application version."
+  printf 'var-flasher:v%s\n' "$version"
+}
+
+prepare_image() {
+  local source_dir="$1" image_name
+  need docker
+  image_name="$(image_name_for_source "$source_dir")"
+  if docker image inspect "$image_name" >/dev/null 2>&1; then
+    printf 'Docker image %s is already prepared.\n' "$image_name"
+    return
+  fi
+  printf 'Preparing Docker image %s. The first installation may take several minutes.\n' "$image_name"
+  docker build --pull --tag "$image_name" "$source_dir" \
+    || fail "Could not prepare the Docker image."
+  docker image rm var-flasher:local >/dev/null 2>&1 || true
+  printf 'Docker image %s is ready.\n' "$image_name"
+}
+
 request_header=()
 if [[ -n "${GITHUB_TOKEN:-}" ]]; then
   request_header=(-H "Authorization: Bearer $GITHUB_TOKEN")
@@ -29,14 +52,14 @@ latest_tag() {
 install_version() {
   need curl
   need tar
-  local tag archive stage version_dir
+  local tag archive stage version_dir source_dir new_install=false
   tag="$(latest_tag)"
   version_dir="$DATA_ROOT/releases/$tag"
 
   if [[ -d "$version_dir" && -x "$version_dir/run.sh" ]]; then
-    ln -sfn "$version_dir" "$DATA_ROOT/current"
-    printf 'Variscite Flasher Tool %s is already installed.\n' "$tag"
+    source_dir="$version_dir"
   else
+    new_install=true
     archive="$(mktemp)"
     stage="$(mktemp -d)"
     trap 'rm -f "$archive"; rm -rf "$stage"' RETURN
@@ -48,10 +71,16 @@ install_version() {
       || fail "The release archive could not be extracted."
     [[ -x "$stage/source/run.sh" || -f "$stage/source/run.sh" ]] || fail "The release does not include run.sh."
     chmod +x "$stage/source/run.sh" "$stage/source/install.sh"
-    mv "$stage/source" "$version_dir"
-    ln -sfn "$version_dir" "$DATA_ROOT/current"
-    printf 'Installed Variscite Flasher Tool %s.\n' "$tag"
+    source_dir="$stage/source"
   fi
+
+  prepare_image "$source_dir"
+
+  if [[ "$new_install" == true ]]; then
+    mv "$stage/source" "$version_dir"
+  fi
+  ln -sfn "$version_dir" "$DATA_ROOT/current"
+  printf 'Installed Variscite Flasher Tool %s.\n' "$tag"
 
   mkdir -p "$BIN_ROOT"
   cat > "$BIN_ROOT/var-flasher" <<'WRAPPER'

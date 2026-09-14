@@ -4,6 +4,17 @@ All notable changes to Variscite Flasher Tool are documented here.
 
 ## Unreleased
 
+## [0.3.2] - 2026-09-14
+
+### Changed
+
+- The installer prepares the versioned Docker image before completing.
+- Application startup uses the prepared image and no longer rebuilds it.
+
+### Fixed
+
+- Launcher errors return to the terminal instead of being written to an accidental file.
+
 ## [0.3.1] - 2026-09-11
 
 ### Changed

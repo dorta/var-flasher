@@ -2,7 +2,12 @@
 set -Eeuo pipefail
 
 ROOT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
-IMAGE_NAME="var-flasher:local"
+APP_VERSION="$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$ROOT_DIR/package.json" | head -n1)"
+[[ "$APP_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]] || {
+  echo "Variscite Flasher Tool has an invalid application version." >&2
+  exit 1
+}
+IMAGE_NAME="var-flasher:v$APP_VERSION"
 HOST_UID="$(id -u)"
 HOST_GID="$(id -g)"
 HOST_USER="$(id -un)"
@@ -61,8 +66,8 @@ cleanup() {
 trap cleanup EXIT
 trap 'exit 130' INT TERM
 
-docker build --pull --quiet --tag "$IMAGE_NAME" "$ROOT_DIR" >/dev/null || {
-  echo "Variscite Flasher Tool could not be built." >&2
+docker image inspect "$IMAGE_NAME" >/dev/null 2>&1 || {
+  echo "Variscite Flasher Tool is not prepared. Run the installer again." >&2
   exit 1
 }
 repair_data_ownership
@@ -128,4 +133,4 @@ xhost +si:localuser:"$HOST_USER" >/dev/null 2>&1 || {
 ) &
 BRIDGE_PID=$!
 
-docker run --name "$CONTAINER_NAME"   --label "com.variscite.flasher.session=$CONTAINER_NAME"   --user "$HOST_UID:$HOST_GID"   --cap-drop ALL --security-opt no-new-privileges   --ipc=host --net=host   --env "DISPLAY=$DISPLAY" --env ELECTRON_OZONE_PLATFORM_HINT=x11   --env "TZ=$HOST_TIMEZONE"   --env HOME=/var-flasher-data/home   --env VAR_FLASHER_DATA_ROOT=/var-flasher-data   --env "VAR_FLASHER_SESSION_ID=$CONTAINER_NAME"   --env VAR_FLASHER_CONFIG_DIR=/var-flasher-data/config   --env LIBGL_ALWAYS_SOFTWARE=1 --env NO_AT_BRIDGE=1 --env GTK_MODULES=   --env VAR_FLASHER_HOST_OPEN_FILE=/var-flasher-host/open-url   --env VAR_FLASHER_HOST_BRIDGE_DIR=/var-flasher-host   --volume /tmp/.X11-unix:/tmp/.X11-unix:rw   --volume /dev:/dev:ro   --volume "$HOST_DATA_DIR:/var-flasher-data:rw"   --volume "$BRIDGE_DIR:/var-flasher-host:rw"   "$IMAGE_NAME" 2> >(grep -v 'Kernel has no file descriptor comparison support' >"$IMAGE_NAME"2)
+docker run --name "$CONTAINER_NAME"   --label "com.variscite.flasher.session=$CONTAINER_NAME"   --user "$HOST_UID:$HOST_GID"   --cap-drop ALL --security-opt no-new-privileges   --ipc=host --net=host   --env "DISPLAY=$DISPLAY" --env ELECTRON_OZONE_PLATFORM_HINT=x11   --env "TZ=$HOST_TIMEZONE"   --env HOME=/var-flasher-data/home   --env VAR_FLASHER_DATA_ROOT=/var-flasher-data   --env "VAR_FLASHER_SESSION_ID=$CONTAINER_NAME"   --env VAR_FLASHER_CONFIG_DIR=/var-flasher-data/config   --env LIBGL_ALWAYS_SOFTWARE=1 --env NO_AT_BRIDGE=1 --env GTK_MODULES=   --env VAR_FLASHER_HOST_OPEN_FILE=/var-flasher-host/open-url   --env VAR_FLASHER_HOST_BRIDGE_DIR=/var-flasher-host   --volume /tmp/.X11-unix:/tmp/.X11-unix:rw   --volume /dev:/dev:ro   --volume "$HOST_DATA_DIR:/var-flasher-data:rw"   --volume "$BRIDGE_DIR:/var-flasher-host:rw"   "$IMAGE_NAME" 2> >(grep -v 'Kernel has no file descriptor comparison support' >&2)
